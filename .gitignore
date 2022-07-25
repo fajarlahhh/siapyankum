@@ -1,0 +1,13 @@
+/node_modules
+/hot
+/storage
+/public/upload/lensakegiatan
+/public/upload/peraturan
+/storage/*.key
+.env
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/vendor
