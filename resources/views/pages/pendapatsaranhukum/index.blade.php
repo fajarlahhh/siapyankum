@@ -52,6 +52,7 @@
               <th>Judul</th>
               <th>Tanggal</th>
               <th>Satuan Kerja</th>
+              <th>File</th>
               <th>Status</th>
               <th></th>
             </tr>
@@ -64,6 +65,12 @@
                 <td>{{ $row->pendapat_saran_judul }}</td>
                 <td>{{ \Carbon\Carbon::parse($row->pendapat_saran_tanggal)->isoFormat('LL') }}</td>
                 <td>{{ $row->pendapat_saran_satuan_kerja }}</td>
+                <td>
+                  @if ($row->pendapat_saran_file)
+                    <a href="{{ url($row->pendapat_saran_file) }}" target="_blank" class="btn btn-xs btn-success">Buka
+                      File</a>
+                  @endif
+                </td>
                 <td>
                   @if ($row->proses->count() > 0)
                     {{ $row->proses[0]->pendapat_saran_proses_status }} -

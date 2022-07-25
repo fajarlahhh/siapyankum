@@ -38,38 +38,40 @@ return [
       'url' => '/ptun',
       'title' => 'PTUN',
     ]],
-  ], [
-    'icon' => 'fas fa-file',
-    'title' => 'Laporan',
-    'url' => 'javascript:;',
-    'caret' => true,
-    'sub_menu' => [[
-      'url' => '/daftarkonsultasihukum',
-      'title' => 'Daftar Konsultasi Hukum',
-    ]],
-  ], [
-    'icon' => 'fas fa-gavel',
-    'title' => 'Pendapat & Saran Hukum',
-    'url' => '/pendapatsaranhukum',
-  ], [
-    'icon' => 'fas fa-rss',
-    'title' => 'Data Lensa Kegiatan',
-    'url' => '/datalensakegiatan',
-  ], [
-    'icon' => 'fas fa-file-pdf',
-    'title' => 'Peraturan',
-    'url' => 'javascript:;',
-    'caret' => true,
-    'sub_menu' => [[
-      'url' => '/jenisperaturan',
-      'title' => 'Jenis Peraturan',
+  ],
+//   ], [
+    //     'icon' => 'fas fa-file',
+    //     'title' => 'Laporan',
+    //     'url' => 'javascript:;',
+    //     'caret' => true,
+    //     'sub_menu' => [[
+    //       'url' => '/daftarkonsultasihukum',
+    //       'title' => 'Daftar Konsultasi Hukum',
+    //     ]],
+    //   ],
+    [
+      'icon' => 'fas fa-gavel',
+      'title' => 'Pendapat & Saran Hukum',
+      'url' => '/pendapatsaranhukum',
     ], [
-      'url' => '/dataperaturan',
-      'title' => 'Data Peraturan',
+      'icon' => 'fas fa-rss',
+      'title' => 'Data Lensa Kegiatan',
+      'url' => '/datalensakegiatan',
+    ], [
+      'icon' => 'fas fa-file-pdf',
+      'title' => 'Peraturan',
+      'url' => 'javascript:;',
+      'caret' => true,
+      'sub_menu' => [[
+        'url' => '/jenisperaturan',
+        'title' => 'Jenis Peraturan',
+      ], [
+        'url' => '/dataperaturan',
+        'title' => 'Data Peraturan',
+      ]],
+    ], [
+      'icon' => 'fas fa-search',
+      'title' => 'Penelitian Catatan Hukum',
+      'url' => '/penelitiancatatanhukum',
     ]],
-  ], [
-    'icon' => 'fas fa-search',
-    'title' => 'Penelitian Catatan Hukum',
-    'url' => '/penelitiancatatanhukum',
-  ]],
 ];

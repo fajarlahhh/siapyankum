@@ -47,27 +47,35 @@ class PtunController extends Controller
         'bantuan_hukum_laporan_nomor' => 'required',
         'bantuan_hukum_proses_deskripsi' => 'required',
         'bantuan_hukum_satuan_kerja' => 'required',
+        'bantuan_hukum_file' => 'required',
       ], [
         'bantuan_hukum_judul.required' => 'Judul tidak boleh kosong',
         'bantuan_hukum_tanggal.required' => 'Tanggal tidak boleh kosong',
         'bantuan_hukum_laporan_nomor.required' => 'Nomor tidak boleh kosong',
-        'bantuan_hukum_proses_deskripsi.required' => 'Deskripsi tidak boleh kosong',
+        'bantuan_hukum_proses_deskripsi.required' => 'Detail Proses tidak boleh kosong',
         'bantuan_hukum_satuan_kerja.required' => 'Satuan Kerja tidak boleh kosong',
+        'bantuan_hukum_file.required' => 'File tidak boleh kosong',
       ]
     );
     try {
-      $ptun = new BantuanHukum();
-      $ptun->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
-      $ptun->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
-      $ptun->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
-      $ptun->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
-      $ptun->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
-      $ptun->bantuan_hukum_jenis = 'ptun';
-      $ptun->operator = Auth::user()->pengguna_nama;
-      $ptun->save();
+      $file = $req->file('bantuan_hukum_file');
+
+      $ext = $file->getClientOriginalExtension();
+      $nama_file = $req->get('bantuan_hukum_judul') . Str::random() . "." . $ext;
+      $file->move(public_path('upload/bh'), $nama_file);
+      $data = new BantuanHukum();
+      $data->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
+      $data->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
+      $data->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
+      $data->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
+      $data->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
+      $data->bantuan_hukum_file = 'public/upload/bh/' . $nama_file;
+      $data->bantuan_hukum_jenis = 'ptun';
+      $data->operator = Auth::user()->pengguna_nama;
+      $data->save();
 
       $proses = new BantuanHukumProses();
-      $proses->bantuan_hukum_id = $ptun->bantuan_hukum_id;
+      $proses->bantuan_hukum_id = $data->bantuan_hukum_id;
       $proses->bantuan_hukum_proses_status = $req->get('bantuan_hukum_proses_status');
       $proses->bantuan_hukum_proses_deskripsi = $req->get('bantuan_hukum_proses_deskripsi');
       $proses->bantuan_hukum_proses_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
@@ -119,15 +127,24 @@ class PtunController extends Controller
       ]
     );
     try {
-      $ptun = BantuanHukum::findOrFail($req->get('bantuan_hukum_id'));
-      $ptun->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
-      $ptun->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
-      $ptun->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
-      $ptun->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
-      $ptun->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
-      $ptun->bantuan_hukum_jenis = 'ptun';
-      $ptun->operator = Auth::user()->pengguna_nama;
-      $ptun->save();
+      $file = $req->file('bantuan_hukum_file');
+      if ($file) {
+        $ext = $file->getClientOriginalExtension();
+        $nama_file = $req->get('bantuan_hukum_judul') . Str::random() . "." . $ext;
+        $file->move(public_path('upload/bh'), $nama_file);
+      }
+      $data = BantuanHukum::findOrFail($req->get('bantuan_hukum_id'));
+      $data->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
+      $data->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
+      $data->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
+      $data->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
+      $data->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
+      if ($file) {
+        $data->bantuan_hukum_file = 'public/upload/bh/' . $nama_file;
+      }
+      $data->bantuan_hukum_jenis = 'ptun';
+      $data->operator = Auth::user()->pengguna_nama;
+      $data->save();
       return redirect($req->get('redirect') ? $req->get('redirect') : 'ptun')
         ->with('swal_pesan', 'Berhasil mengedit data bantuan hukum PTUN ' . $req->get('bantuan_hukum_judul'))
         ->with('swal_judul', 'Edit data')
@@ -196,8 +213,8 @@ class PtunController extends Controller
   public function hapus($id)
   {
     try {
-      $ptun = BantuanHukum::findOrFail($id);
-      $ptun->delete();
+      $data = BantuanHukum::findOrFail($id);
+      $data->delete();
       return response()->json([
         'swal_pesan' => 'Berhasil menghapus data bantuan hukum PTUN ' . $ptun->bantuan_hukum_laporan_nomor,
         'swal_judul' => 'Hapus data',

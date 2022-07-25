@@ -47,27 +47,35 @@ class PidanaController extends Controller
         'bantuan_hukum_laporan_nomor' => 'required',
         'bantuan_hukum_proses_deskripsi' => 'required',
         'bantuan_hukum_satuan_kerja' => 'required',
+        'bantuan_hukum_file' => 'required',
       ], [
         'bantuan_hukum_judul.required' => 'Judul tidak boleh kosong',
         'bantuan_hukum_tanggal.required' => 'Tanggal tidak boleh kosong',
         'bantuan_hukum_laporan_nomor.required' => 'Nomor tidak boleh kosong',
-        'bantuan_hukum_proses_deskripsi.required' => 'Deskripsi tidak boleh kosong',
+        'bantuan_hukum_proses_deskripsi.required' => 'Detail Proses tidak boleh kosong',
         'bantuan_hukum_satuan_kerja.required' => 'Satuan Kerja tidak boleh kosong',
+        'bantuan_hukum_file.required' => 'File tidak boleh kosong',
       ]
     );
     try {
-      $pidana = new BantuanHukum();
-      $pidana->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
-      $pidana->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
-      $pidana->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
-      $pidana->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
-      $pidana->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
-      $pidana->bantuan_hukum_jenis = 'pidana';
-      $pidana->operator = Auth::user()->pengguna_nama;
-      $pidana->save();
+      $file = $req->file('bantuan_hukum_file');
+
+      $ext = $file->getClientOriginalExtension();
+      $nama_file = $req->get('bantuan_hukum_judul') . Str::random() . "." . $ext;
+      $file->move(public_path('upload/bh'), $nama_file);
+      $data = new BantuanHukum();
+      $data->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
+      $data->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
+      $data->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
+      $data->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
+      $data->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
+      $data->bantuan_hukum_file = 'public/upload/bh/' . $nama_file;
+      $data->bantuan_hukum_jenis = 'pidana';
+      $data->operator = Auth::user()->pengguna_nama;
+      $data->save();
 
       $proses = new BantuanHukumProses();
-      $proses->bantuan_hukum_id = $pidana->bantuan_hukum_id;
+      $proses->bantuan_hukum_id = $data->bantuan_hukum_id;
       $proses->bantuan_hukum_proses_status = $req->get('bantuan_hukum_proses_status');
       $proses->bantuan_hukum_proses_deskripsi = $req->get('bantuan_hukum_proses_deskripsi');
       $proses->bantuan_hukum_proses_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
@@ -119,15 +127,24 @@ class PidanaController extends Controller
       ]
     );
     try {
-      $pidana = BantuanHukum::findOrFail($req->get('bantuan_hukum_id'));
-      $pidana->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
-      $pidana->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
-      $pidana->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
-      $pidana->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
-      $pidana->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
-      $pidana->bantuan_hukum_jenis = 'pidana';
-      $pidana->operator = Auth::user()->pengguna_nama;
-      $pidana->save();
+      $file = $req->file('bantuan_hukum_file');
+      if ($file) {
+        $ext = $file->getClientOriginalExtension();
+        $nama_file = $req->get('bantuan_hukum_judul') . Str::random() . "." . $ext;
+        $file->move(public_path('upload/bh'), $nama_file);
+      }
+      $data = BantuanHukum::findOrFail($req->get('bantuan_hukum_id'));
+      $data->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
+      $data->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
+      $data->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
+      $data->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
+      $data->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
+      if ($file) {
+        $data->bantuan_hukum_file = 'public/upload/bh/' . $nama_file;
+      }
+      $data->bantuan_hukum_jenis = 'pidana';
+      $data->operator = Auth::user()->pengguna_nama;
+      $data->save();
       return redirect($req->get('redirect') ? $req->get('redirect') : 'pidana')
         ->with('swal_pesan', 'Berhasil mengedit data bantuan hukum pidana ' . $req->get('bantuan_hukum_judul'))
         ->with('swal_judul', 'Edit data')

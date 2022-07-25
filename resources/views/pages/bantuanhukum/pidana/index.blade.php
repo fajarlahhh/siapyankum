@@ -3,7 +3,8 @@
 @section('title', ' | Bantuan Hukum / Pidana')
 
 @section('page')
-  <li class="breadcrumb-item active">Pidana</li>
+  <li class="breadcrumb-item active">
+    Pidana</li>
 @endsection
 
 @push('css')
@@ -51,6 +52,7 @@
               <th>Judul</th>
               <th>Tanggal</th>
               <th>Satuan Kerja</th>
+              <th>File</th>
               <th>Status</th>
               <th></th>
             </tr>
@@ -63,6 +65,12 @@
                 <td>{{ $row->bantuan_hukum_judul }}</td>
                 <td>{{ \Carbon\Carbon::parse($row->bantuan_hukum_tanggal)->isoFormat('LL') }}</td>
                 <td>{{ $row->bantuan_hukum_satuan_kerja }}</td>
+                <td>
+                  @if ($row->bantuan_hukum_file)
+                    <a href="{{ url($row->bantuan_hukum_file) }}" target="_blank" class="btn btn-xs btn-success">Buka
+                      File</a>
+                  @endif
+                </td>
                 <td>
                   @if ($row->proses->count() > 0)
                     {{ $row->proses[0]->bantuan_hukum_proses_status }} -

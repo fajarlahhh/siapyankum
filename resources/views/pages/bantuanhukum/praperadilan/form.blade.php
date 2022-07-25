@@ -28,7 +28,7 @@
       <h4 class="panel-title">Form</h4>
     </div>
     <form action="{{ route('praperadilan.' . strtolower($aksi)) }}" method="post" data-parsley-validate="true"
-      data-parsley-errors-messages-disabled="">
+      data-parsley-errors-messages-disabled="" enctype="multipart/form-data">
       @method(strtolower($aksi) == 'tambah' ? 'POST' : 'PUT')
       @csrf
       <div class="panel-body">
@@ -66,9 +66,11 @@
         </div>
         <div class="form-group">
           <label class="control-label">Keterangan</label>
-          <textarea class="textarea form-control wysihtml5" name="bantuan_hukum_keterangan" rows="12">
-						{{ $aksi == 'Edit' ? $data->bantuan_hukum_keterangan : old('bantuan_hukum_keterangan') }}
-					</textarea>
+          <textarea class="textarea form-control " name="bantuan_hukum_keterangan" rows="5">{{ $aksi == 'Edit' ? $data->bantuan_hukum_keterangan : old('bantuan_hukum_keterangan') }}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="control-label">File</label>
+          <input type="file" class="form-control" name="bantuan_hukum_file" accept="application/pdf">
         </div>
         @if ($aksi == 'Tambah')
           <hr>
@@ -91,10 +93,8 @@
             </div>
             <div class="form-group">
               <label class="control-label">Detail</label>
-              <textarea class="textarea form-control wysihtml5" name="bantuan_hukum_proses_deskripsi" placeholder="Enter text ..."
-                rows="12">
-							{{ $aksi == 'Edit' ? $data->bantuan_hukum_proses_deskripsi : old('bantuan_hukum_proses_deskripsi') }}
-						</textarea>
+              <textarea class="textarea form-control " name="bantuan_hukum_proses_deskripsi"
+                placeholder="Enter text ..."rows="5">{{ $aksi == 'Edit' ? $data->bantuan_hukum_proses_deskripsi : old('bantuan_hukum_proses_deskripsi') }}</textarea>
             </div>
           </div>
         @endif

@@ -47,27 +47,35 @@ class AgamaController extends Controller
         'bantuan_hukum_laporan_nomor' => 'required',
         'bantuan_hukum_proses_deskripsi' => 'required',
         'bantuan_hukum_satuan_kerja' => 'required',
+        'bantuan_hukum_file' => 'required',
       ], [
         'bantuan_hukum_judul.required' => 'Judul tidak boleh kosong',
         'bantuan_hukum_tanggal.required' => 'Tanggal tidak boleh kosong',
         'bantuan_hukum_laporan_nomor.required' => 'Nomor tidak boleh kosong',
-        'bantuan_hukum_proses_deskripsi.required' => 'Deskripsi tidak boleh kosong',
+        'bantuan_hukum_proses_deskripsi.required' => 'Detail Proses tidak boleh kosong',
         'bantuan_hukum_satuan_kerja.required' => 'Satuan Kerja tidak boleh kosong',
+        'bantuan_hukum_file.required' => 'File tidak boleh kosong',
       ]
     );
     try {
-      $agama = new BantuanHukum();
-      $agama->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
-      $agama->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
-      $agama->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
-      $agama->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
-      $agama->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
-      $agama->bantuan_hukum_jenis = 'agama';
-      $agama->operator = Auth::user()->pengguna_nama;
-      $agama->save();
+      $file = $req->file('bantuan_hukum_file');
+
+      $ext = $file->getClientOriginalExtension();
+      $nama_file = $req->get('bantuan_hukum_judul') . Str::random() . "." . $ext;
+      $file->move(public_path('upload/bh'), $nama_file);
+      $data = new BantuanHukum();
+      $data->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
+      $data->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
+      $data->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
+      $data->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
+      $data->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
+      $data->bantuan_hukum_file = 'public/upload/bh/' . $nama_file;
+      $data->bantuan_hukum_jenis = 'agama';
+      $data->operator = Auth::user()->pengguna_nama;
+      $data->save();
 
       $proses = new BantuanHukumProses();
-      $proses->bantuan_hukum_id = $agama->bantuan_hukum_id;
+      $proses->bantuan_hukum_id = $data->bantuan_hukum_id;
       $proses->bantuan_hukum_proses_status = $req->get('bantuan_hukum_proses_status');
       $proses->bantuan_hukum_proses_deskripsi = $req->get('bantuan_hukum_proses_deskripsi');
       $proses->bantuan_hukum_proses_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
@@ -119,15 +127,24 @@ class AgamaController extends Controller
       ]
     );
     try {
-      $agama = BantuanHukum::findOrFail($req->get('bantuan_hukum_id'));
-      $agama->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
-      $agama->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
-      $agama->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
-      $agama->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
-      $agama->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
-      $agama->bantuan_hukum_jenis = 'agama';
-      $agama->operator = Auth::user()->pengguna_nama;
-      $agama->save();
+      $file = $req->file('bantuan_hukum_file');
+      if ($file) {
+        $ext = $file->getClientOriginalExtension();
+        $nama_file = $req->get('bantuan_hukum_judul') . Str::random() . "." . $ext;
+        $file->move(public_path('upload/bh'), $nama_file);
+      }
+      $data = BantuanHukum::findOrFail($req->get('bantuan_hukum_id'));
+      $data->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
+      $data->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
+      $data->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
+      $data->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
+      $data->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
+      if ($file) {
+        $data->bantuan_hukum_file = 'public/upload/bh/' . $nama_file;
+      }
+      $data->bantuan_hukum_jenis = 'agama';
+      $data->operator = Auth::user()->pengguna_nama;
+      $data->save();
       return redirect($req->get('redirect') ? $req->get('redirect') : 'agama')
         ->with('swal_pesan', 'Berhasil mengedit data bantuan hukum agama ' . $req->get('bantuan_hukum_judul'))
         ->with('swal_judul', 'Edit data')

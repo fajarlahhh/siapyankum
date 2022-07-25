@@ -153,9 +153,9 @@ Route::group(['middleware' => ['auth']], function () {
 Route::prefix('frontend')->group(function () {
   Route::get('/', 'HomeController@index');
 
-  Route::prefix('konsultasihukum')->group(function () {
-    Route::get('/', 'HomeController@konsultasihukum');
-  });
+//   Route::prefix('konsultasihukum')->group(function () {
+  //     Route::get('/', 'HomeController@konsultasihukum');
+  //   });
 
   Route::prefix('bantuanhukum')->group(function () {
     Route::get('/', 'HomeController@bantuanhukum');

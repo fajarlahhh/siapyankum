@@ -64,10 +64,12 @@
           </select>
         </div>
         <div class="form-group">
+          <label for="control-label">File</label>
+          <input type="file" class="form-control" name="pendapat_saran_file" accept="application/pdf">
+        </div>
+        <div class="form-group">
           <label class="control-label">Keterangan</label>
-          <textarea class="textarea form-control wysihtml5" name="pendapat_saran_keterangan" rows="12">
-						{{ $aksi == 'Edit' ? $data->pendapat_saran_keterangan : old('pendapat_saran_keterangan') }}
-					</textarea>
+          <textarea class="textarea form-control" name="pendapat_saran_keterangan" rows="5">{{ $aksi == 'Edit' ? $data->pendapat_saran_keterangan : old('pendapat_saran_keterangan') }}</textarea>
         </div>
         @if ($aksi == 'Tambah')
           <hr>
@@ -90,9 +92,7 @@
             </div>
             <div class="form-group">
               <label class="control-label">Detail</label>
-              <textarea class="textarea form-control wysihtml5" name="pendapat_saran_proses_deskripsi" rows="12">
-                            {{ $aksi == 'Edit' ? $data->pendapat_saran_proses_deskripsi : old('pendapat_saran_proses_deskripsi') }}
-                        </textarea>
+              <textarea class="textarea form-control" name="pendapat_saran_proses_deskripsi" rows="5">{{ $aksi == 'Edit' ? $data->pendapat_saran_proses_deskripsi : old('pendapat_saran_proses_deskripsi') }}</textarea>
             </div>
           </div>
         @endif

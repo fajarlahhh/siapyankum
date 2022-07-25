@@ -28,14 +28,31 @@ $warna = ['secondary ', 'purple', 'indigo', 'primary', 'info', 'yellow', 'warnin
           <td>{{ $data->pendapat_saran_judul }}</td>
         </tr>
         <tr>
-          <td colspan="3">{!! $data->pendapat_saran_keterangan !!}</td>
+          <th>Deskripsi</th>
+          <td>:</td>
+          <td>{{ $data->pendapat_saran_keterangan }}</td>
+        </tr>
+        <tr>
+          <th>File</th>
+          <td>:</td>
+          <td>
+            @if (auth()->check())
+              @if ($data->pendapat_saran_file)
+                <a href="{{ url($data->pendapat_saran_file) }}" target="_blank" class="btn btn-xs btn-success">Download
+                  File</a>
+              @endif
+            @else
+              <a href="/login" class="btn btn-xs btn-success">Login to Download
+                File</a>
+            @endif
+          </td>
         </tr>
       </tbody>
     </table>
   </div>
   <div class="note note-{{ $warna[rand(0, 11)] }} m-b-15">
     <h5>Status : {{ $data->proses->last()->pendapat_saran_proses_status }}</h5>
-    <label>{!! $data->proses->last()->pendapat_saran_proses_deskripsi !!}</label>
+    <label>{{ $data->proses->last()->pendapat_saran_proses_deskripsi }}</label>
   </div>
   <br>
   <div class="text-center">

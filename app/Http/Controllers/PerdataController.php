@@ -47,27 +47,35 @@ class PerdataController extends Controller
         'bantuan_hukum_laporan_nomor' => 'required',
         'bantuan_hukum_proses_deskripsi' => 'required',
         'bantuan_hukum_satuan_kerja' => 'required',
+        'bantuan_hukum_file' => 'required',
       ], [
         'bantuan_hukum_judul.required' => 'Judul tidak boleh kosong',
         'bantuan_hukum_tanggal.required' => 'Tanggal tidak boleh kosong',
         'bantuan_hukum_laporan_nomor.required' => 'Nomor tidak boleh kosong',
-        'bantuan_hukum_proses_deskripsi.required' => 'Deskripsi tidak boleh kosong',
+        'bantuan_hukum_proses_deskripsi.required' => 'Detail Proses tidak boleh kosong',
         'bantuan_hukum_satuan_kerja.required' => 'Satuan Kerja tidak boleh kosong',
+        'bantuan_hukum_file.required' => 'File tidak boleh kosong',
       ]
     );
     try {
-      $perdata = new BantuanHukum();
-      $perdata->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
-      $perdata->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
-      $perdata->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
-      $perdata->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
-      $perdata->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
-      $perdata->bantuan_hukum_jenis = 'perdata';
-      $perdata->operator = Auth::user()->pengguna_nama;
-      $perdata->save();
+      $file = $req->file('bantuan_hukum_file');
+
+      $ext = $file->getClientOriginalExtension();
+      $nama_file = $req->get('bantuan_hukum_judul') . Str::random() . "." . $ext;
+      $file->move(public_path('upload/bh'), $nama_file);
+      $data = new BantuanHukum();
+      $data->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
+      $data->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
+      $data->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
+      $data->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
+      $data->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
+      $data->bantuan_hukum_file = 'public/upload/bh/' . $nama_file;
+      $data->bantuan_hukum_jenis = 'perdata';
+      $data->operator = Auth::user()->pengguna_nama;
+      $data->save();
 
       $proses = new BantuanHukumProses();
-      $proses->bantuan_hukum_id = $perdata->bantuan_hukum_id;
+      $proses->bantuan_hukum_id = $data->bantuan_hukum_id;
       $proses->bantuan_hukum_proses_status = $req->get('bantuan_hukum_proses_status');
       $proses->bantuan_hukum_proses_deskripsi = $req->get('bantuan_hukum_proses_deskripsi');
       $proses->bantuan_hukum_proses_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
@@ -121,15 +129,24 @@ class PerdataController extends Controller
       ]
     );
     try {
-      $perdata = BantuanHukum::findOrFail($req->get('bantuan_hukum_id'));
-      $perdata->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
-      $perdata->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
-      $perdata->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
-      $perdata->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
-      $perdata->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
-      $perdata->bantuan_hukum_jenis = 'perdata';
-      $perdata->operator = Auth::user()->pengguna_nama;
-      $perdata->save();
+      $file = $req->file('bantuan_hukum_file');
+      if ($file) {
+        $ext = $file->getClientOriginalExtension();
+        $nama_file = $req->get('bantuan_hukum_judul') . Str::random() . "." . $ext;
+        $file->move(public_path('upload/bh'), $nama_file);
+      }
+      $data = BantuanHukum::findOrFail($req->get('bantuan_hukum_id'));
+      $data->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
+      $data->bantuan_hukum_tanggal = Carbon::parse($req->get('bantuan_hukum_tanggal'))->format('Y-m-d');
+      $data->bantuan_hukum_laporan_nomor = $req->get('bantuan_hukum_laporan_nomor');
+      $data->bantuan_hukum_keterangan = $req->get('bantuan_hukum_keterangan');
+      $data->bantuan_hukum_satuan_kerja = $req->get('bantuan_hukum_satuan_kerja');
+      if ($file) {
+        $data->bantuan_hukum_file = 'public/upload/bh/' . $nama_file;
+      }
+      $data->bantuan_hukum_jenis = 'perdata';
+      $data->operator = Auth::user()->pengguna_nama;
+      $data->save();
       return redirect($req->get('redirect') ? $req->get('redirect') : 'perdata')
         ->with('swal_pesan', 'Berhasil mengedit data bantuan hukum perdata ' . $req->get('bantuan_hukum_judul'))
         ->with('swal_judul', 'Edit data')

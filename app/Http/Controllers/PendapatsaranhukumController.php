@@ -54,12 +54,20 @@ class PendapatsaranhukumController extends Controller
       ]
     );
     try {
+
+      $file = $req->file('pendapat_saran_file');
+
+      $ext = $file->getClientOriginalExtension();
+      $nama_file = $req->get('pendapat_saran_judul') . Str::random() . "." . $ext;
+      $file->move(public_path('upload/psh'), $nama_file);
+
       $pendapatsaranhukum = new PendapatSaran();
       $pendapatsaranhukum->pendapat_saran_judul = $req->get('pendapat_saran_judul');
       $pendapatsaranhukum->pendapat_saran_tanggal = Carbon::parse($req->get('pendapat_saran_tanggal'))->format('Y-m-d');
       $pendapatsaranhukum->pendapat_saran_laporan_nomor = $req->get('pendapat_saran_laporan_nomor');
       $pendapatsaranhukum->pendapat_saran_keterangan = $req->get('pendapat_saran_keterangan');
       $pendapatsaranhukum->pendapat_saran_satuan_kerja = $req->get('pendapat_saran_satuan_kerja');
+      $pendapatsaranhukum->pendapat_saran_file = 'public/upload/psh/' . $nama_file;
       $pendapatsaranhukum->operator = Auth::user()->pengguna_nama;
       $pendapatsaranhukum->save();
 
@@ -116,12 +124,22 @@ class PendapatsaranhukumController extends Controller
       ]
     );
     try {
+      $file = $req->file('pendapat_saran_file');
+      if ($file) {
+        $ext = $file->getClientOriginalExtension();
+        $nama_file = $req->get('pendapat_saran_judul') . Str::random() . "." . $ext;
+        $file->move(public_path('upload/psh'), $nama_file);
+      }
+
       $pendapatsaranhukum = PendapatSaran::findOrFail($req->get('pendapat_saran_id'));
       $pendapatsaranhukum->pendapat_saran_judul = $req->get('pendapat_saran_judul');
       $pendapatsaranhukum->pendapat_saran_tanggal = Carbon::parse($req->get('pendapat_saran_tanggal'))->format('Y-m-d');
       $pendapatsaranhukum->pendapat_saran_laporan_nomor = $req->get('pendapat_saran_laporan_nomor');
       $pendapatsaranhukum->pendapat_saran_keterangan = $req->get('pendapat_saran_keterangan');
       $pendapatsaranhukum->pendapat_saran_satuan_kerja = $req->get('pendapat_saran_satuan_kerja');
+      if ($file) {
+        $pendapatsaranhukum->pendapat_saran_file = 'public/upload/psh/' . $nama_file;
+      }
       $pendapatsaranhukum->operator = Auth::user()->pengguna_nama;
       $pendapatsaranhukum->save();
       return redirect($req->get('redirect') ? $req->get('redirect') : 'pendapatsaranhukum')
