@@ -9,6 +9,7 @@ use App\PendapatSaran;
 use App\Peraturan;
 use App\PeraturanJenis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class HomeController extends Controller
 {
@@ -63,6 +64,27 @@ class HomeController extends Controller
       'i' => ($req->input('page', 1) - 1) * 10,
       'data' => $bantuanhukum,
     ]);
+  }
+
+  public function pendapatsaran_download(Request $req)
+  {
+    try {
+      if ($req->kode == '70121132') {
+        $data = BantuanHukum::where('pendapat_saran_id', $req->id)->first();
+        $headers = array(
+          'Content-Type: application/pdf',
+        );
+
+        return Response::download($data->bantuan_hukum_file, $data->bantuan_hukum_file . '.pdf', $headers);
+      } else {
+        return abort(403);
+      }
+    } catch (\Exception $e) {
+      return view('frontend.pages.eror', [
+        'header' => "Pendapat & Saran Hukum",
+        'pesan' => $e->getMessage(),
+      ]);
+    }
   }
 
   public function bantuanhukum_tampil($jenis, $id)
@@ -225,6 +247,27 @@ class HomeController extends Controller
       return view('frontend.pages.pendapatsaranhukum.tampil', [
         'data' => $pendapatsaranhukum,
       ]);
+    } catch (\Exception $e) {
+      return view('frontend.pages.eror', [
+        'header' => "Pendapat & Saran Hukum",
+        'pesan' => $e->getMessage(),
+      ]);
+    }
+  }
+
+  public function pendapatsaran_download(Request $req)
+  {
+    try {
+      if ($req->kode == '70121132') {
+        $pendapatsaranhukum = PendapatSaran::where('pendapat_saran_id', $req->id)->first();
+        $headers = array(
+          'Content-Type: application/pdf',
+        );
+
+        return Response::download($pendapatsaranhukum->pendapat_saran_file, $pendapatsaranhukum->pendapat_saran_judul . '.pdf', $headers);
+      } else {
+        return abort(403);
+      }
     } catch (\Exception $e) {
       return view('frontend.pages.eror', [
         'header' => "Pendapat & Saran Hukum",

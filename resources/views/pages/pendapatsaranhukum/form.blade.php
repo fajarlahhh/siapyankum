@@ -28,7 +28,7 @@
       <h4 class="panel-title">Form</h4>
     </div>
     <form action="{{ route('pendapatsaranhukum.' . strtolower($aksi)) }}" method="post" data-parsley-validate="true"
-      data-parsley-errors-messages-disabled="">
+      data-parsley-errors-messages-disabled="" enctype="multipart/form-data">
       @method(strtolower($aksi) == 'tambah' ? 'POST' : 'PUT')
       @csrf
       <div class="panel-body">

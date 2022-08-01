@@ -184,6 +184,7 @@ Route::prefix('frontend')->group(function () {
   Route::prefix('pendapatsaran')->group(function () {
     Route::get('/', 'HomeController@pendapatsaran');
     Route::get('/{id}', 'HomeController@pendapatsaran_tampil');
+    Route::post('/download', 'HomeController@pendapatsaran_download');
   });
 });
 

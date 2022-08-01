@@ -61,7 +61,7 @@ class PerdataController extends Controller
       $file = $req->file('bantuan_hukum_file');
 
       $ext = $file->getClientOriginalExtension();
-      $nama_file = $req->get('bantuan_hukum_judul') . Str::random() . "." . $ext;
+      $nama_file = "BH" . date('Ymd') . Str::random() . "." . $ext;
       $file->move(public_path('upload/bh'), $nama_file);
       $data = new BantuanHukum();
       $data->bantuan_hukum_judul = $req->get('bantuan_hukum_judul');
@@ -132,7 +132,7 @@ class PerdataController extends Controller
       $file = $req->file('bantuan_hukum_file');
       if ($file) {
         $ext = $file->getClientOriginalExtension();
-        $nama_file = $req->get('bantuan_hukum_judul') . Str::random() . "." . $ext;
+        $nama_file = "BH" . date('Ymd') . Str::random() . "." . $ext;
         $file->move(public_path('upload/bh'), $nama_file);
       }
       $data = BantuanHukum::findOrFail($req->get('bantuan_hukum_id'));

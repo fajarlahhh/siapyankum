@@ -58,7 +58,7 @@ class PendapatsaranhukumController extends Controller
       $file = $req->file('pendapat_saran_file');
 
       $ext = $file->getClientOriginalExtension();
-      $nama_file = $req->get('pendapat_saran_judul') . Str::random() . "." . $ext;
+      $nama_file = "PSH" . date('Ymd') . Str::random() . "." . $ext;
       $file->move(public_path('upload/psh'), $nama_file);
 
       $pendapatsaranhukum = new PendapatSaran();
@@ -127,7 +127,7 @@ class PendapatsaranhukumController extends Controller
       $file = $req->file('pendapat_saran_file');
       if ($file) {
         $ext = $file->getClientOriginalExtension();
-        $nama_file = $req->get('pendapat_saran_judul') . Str::random() . "." . $ext;
+        $nama_file = "PSH" . date('Ymd') . Str::random() . "." . $ext;
         $file->move(public_path('upload/psh'), $nama_file);
       }
 

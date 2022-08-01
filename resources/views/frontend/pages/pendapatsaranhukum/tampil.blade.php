@@ -36,13 +36,9 @@ $warna = ['secondary ', 'purple', 'indigo', 'primary', 'info', 'yellow', 'warnin
           <th>File</th>
           <td>:</td>
           <td>
-            @if (auth()->check())
-              @if ($data->pendapat_saran_file)
-                <a href="{{ url($data->pendapat_saran_file) }}" target="_blank" class="btn btn-xs btn-success">Download
-                  File</a>
-              @endif
-            @else
-              <a href="/login" class="btn btn-xs btn-success">Login to Download
+            @if ($data->pendapat_saran_file)
+              <a href="javascript:;" data-toggle="modal" onclick="kode({{ $data->pendapat_saran_id }})"
+                data-target="#downloadModal" class="btn btn-xs btn-success">Download
                 File</a>
             @endif
           </td>
@@ -58,4 +54,41 @@ $warna = ['secondary ', 'purple', 'indigo', 'primary', 'info', 'yellow', 'warnin
   <div class="text-center">
     <a href="/frontend/pendapatsaran" class="text-center btn btn-inverse">Kembali</a>
   </div>
+  <div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/frontend/pendapatsaran/download" method="POST">
+          <div class="modal-body">
+            <div class="form-group">
+              @csrf
+              <label class="control-label">Kode</label>
+              <input type="hidden" name="id" id="kode">
+              <input type="password" name="kode" class="form-control" id="password" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Download">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 @endsection
+@push('scripts')
+  <script>
+    function kode(id) {
+      $('#kode').val(id);
+    }
+
+    function ulangi() {
+      $('#password').val();
+    }
+  </script>
+@endpush
