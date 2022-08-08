@@ -45,12 +45,14 @@ class PendapatsaranhukumController extends Controller
         'pendapat_saran_laporan_nomor' => 'required',
         'pendapat_saran_proses_deskripsi' => 'required',
         'pendapat_saran_satuan_kerja' => 'required',
+        'pendapat_saran_file' => 'required',
       ], [
         'pendapat_saran_judul.required' => 'Judul tidak boleh kosong',
         'pendapat_saran_tanggal.required' => 'Tanggal tidak boleh kosong',
         'pendapat_saran_laporan_nomor.required' => 'Nomor tidak boleh kosong',
         'pendapat_saran_proses_deskripsi.required' => 'Deskripsi tidak boleh kosong',
         'pendapat_saran_satuan_kerja.required' => 'Satuan Kerja tidak boleh kosong',
+        'pendapat_saran_file.required' => 'File Kerja tidak boleh kosong',
       ]
     );
     try {

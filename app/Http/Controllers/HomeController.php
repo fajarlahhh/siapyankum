@@ -66,11 +66,11 @@ class HomeController extends Controller
     ]);
   }
 
-  public function pendapatsaran_download(Request $req)
+  public function bantuanhukum_download(Request $req)
   {
     try {
       if ($req->kode == '70121132') {
-        $data = BantuanHukum::where('pendapat_saran_id', $req->id)->first();
+        $data = BantuanHukum::where('bantuan_hukum_id', $req->id)->first();
         $headers = array(
           'Content-Type: application/pdf',
         );
