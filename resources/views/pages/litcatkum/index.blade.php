@@ -57,6 +57,7 @@
               <th>Hukuman</th>
               <th>No. PRS</th>
               <th>Hasil</th>
+              <th>File</th>
               <th></th>
             </tr>
           </thead>
@@ -77,6 +78,18 @@
                 <td>{{ $row->litcatkum_hukuman }}</td>
                 <td>{{ $row->litcatkum_nomor_prs }}</td>
                 <td>{{ $row->litcatkum_hasil }}</td>
+                <td>
+                  @if ($row->litcatkum_skhd)
+                    <a href="{{ url($row->litcatkum_skhd) }}" target="_blank" class="btn btn-xs btn-success">
+                      File SKHD</a>
+                  @endif
+                  <br>
+                  <br>
+                  @if ($row->litcatkum_rps)
+                    <a href="{{ url($row->litcatkum_rps) }}" target="_blank" class="btn btn-xs btn-success">
+                      File RPS</a>
+                  @endif
+                </td>
                 <td class="pull-right">
                   <a href="/penelitiancatatanhukum/edit/{{ $row->litcatkum_id }}" id='btn-del'
                     class='btn btn-grey btn-xs m-r-3'><i class='fas fa-edit'></i> Edit Data</a>

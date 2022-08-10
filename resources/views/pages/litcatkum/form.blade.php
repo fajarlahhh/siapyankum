@@ -26,8 +26,8 @@
       </div>
       <h4 class="panel-title">Form</h4>
     </div>
-    <form action="{{ route('penelitiancatatanhukum.' . strtolower($aksi)) }}" method="post"
-      data-parsley-validate="true" data-parsley-errors-messages-disabled="">
+    <form action="{{ route('penelitiancatatanhukum.' . strtolower($aksi)) }}" method="post" data-parsley-validate="true"
+      data-parsley-errors-messages-disabled="" enctype="multipart/form-data">
       @method(strtolower($aksi) == 'tambah' ? 'POST' : 'PUT')
       @csrf
       <div class="panel-body">
@@ -116,6 +116,14 @@
           <input class="form-control" type="text" name="litcatkum_hasil"
             value="{{ $aksi == 'Edit' ? $data->litcatkum_hasil : old('litcatkum_hasil') }}" required
             data-parsley-minlength="1" data-parsley-maxlength="250" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="control-label">File SKHD</label>
+          <input type="file" class="form-control" name="skhd_file" accept="application/pdf">
+        </div>
+        <div class="form-group">
+          <label for="control-label">File RPS</label>
+          <input type="file" class="form-control" name="rps_file" accept="application/pdf">
         </div>
       </div>
       <div class="panel-footer">

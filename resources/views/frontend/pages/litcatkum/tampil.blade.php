@@ -90,9 +90,83 @@ $warna = ['grey', 'purple', 'indigo', 'primary', 'info', 'warning', 'pink', 'dan
           <td>{{ $data->litcatkum_hasil }}</td>
 
         </tr>
+        <tr>
+          <th>File SKHD</th>
+          <td>:</td>
+          <td>
+            @if ($data->litcatkum_skhd)
+              <a href="javascript:;" data-toggle="modal" onclick="kode({{ $data->litcatkum_id }})"
+                data-target="#downloadModal" class="btn btn-xs btn-success">Download
+                File SKHD</a>
+            @endif
+          </td>
+        </tr>
+        <tr>
+          <th>File RPS</th>
+          <td>:</td>
+          <td>
+            @if ($data->litcatkum_rps)
+              <a href="javascript:;" data-toggle="modal" onclick="kode({{ $data->litcatkum_id }})"
+                data-target="#downloadModal1" class="btn btn-xs btn-success">Download
+                File RPS</a>
+            @endif
+          </td>
+        </tr>
 
       </tbody>
     </table>
+  </div>
+  <div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/frontend/litcatkum/skhd" method="POST">
+          <div class="modal-body">
+            <div class="form-group">
+              @csrf
+              <label class="control-label">Kode</label>
+              <input type="hidden" name="id" id="kode">
+              <input type="password" name="kode" class="form-control" id="password" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Download">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="downloadModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/frontend/litcatkum/rps" method="POST">
+          <div class="modal-body">
+            <div class="form-group">
+              @csrf
+              <label class="control-label">Kode</label>
+              <input type="hidden" name="id" id="kode">
+              <input type="password" name="kode" class="form-control" id="password" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <input type="submit" class="btn btn-primary" value="Download">
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
   {{-- <link rel="stylesheet" href="{{ '/assets/pdf/css/viewer.css' }}">
   <link rel="resource" type="application/l10n" href="{{ '/assets/pdf/locale/locale.properties' }}">
@@ -524,3 +598,14 @@ $warna = ['grey', 'purple', 'indigo', 'primary', 'info', 'warning', 'pink', 'dan
     <a href="/frontend/lensakegiatan" class="text-center btn btn-xs btn-inverse">Kembali</a>
   </div>
 @endsection
+@push('scripts')
+  <script>
+    function kode(id) {
+      $('#kode').val(id);
+    }
+
+    function ulangi() {
+      $('#password').val();
+    }
+  </script>
+@endpush

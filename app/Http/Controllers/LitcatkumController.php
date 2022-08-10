@@ -53,7 +53,6 @@ class LitcatkumController extends Controller
     );
     try {
       $file1 = $req->file('skhd_file');
-
       $ext1 = $file1->getClientOriginalExtension();
       $nama_file1 = "SKHD" . date('Ymd') . Str::random() . "." . $ext1;
       $file1->move(public_path('upload/skhd'), $nama_file1);
@@ -78,8 +77,8 @@ class LitcatkumController extends Controller
       $litcatkum->litcatkum_hukuman = $req->get('litcatkum_hukuman');
       $litcatkum->litcatkum_nomor_prs = $req->get('litcatkum_nomor_prs');
       $litcatkum->litcatkum_hasil = $req->get('litcatkum_hasil');
-      $litcatkum->litcatkum_skhd = 'public/upload/psh/' . $nama_file1;
-      $litcatkum->litcatkum_rps = 'public/upload/psh/' . $nama_file2;
+      $litcatkum->litcatkum_skhd = 'public/upload/skhd/' . $nama_file1;
+      $litcatkum->litcatkum_rps = 'public/upload/rps/' . $nama_file2;
       $litcatkum->operator = Auth::user()->pengguna_nama;
       $litcatkum->save();
 
@@ -132,18 +131,18 @@ class LitcatkumController extends Controller
       ]
     );
     try {
-      $file = $req->file('pendapat_saran_file');
+      $file = $req->file('skhd_file');
       if ($file) {
         $ext = $file->getClientOriginalExtension();
         $nama_file = "SKHD" . date('Ymd') . Str::random() . "." . $ext;
         $file->move(public_path('upload/skhd'), $nama_file);
       }
 
-      $file1 = $req->file('pendapat_saran_file');
+      $file1 = $req->file('rps_file');
       if ($file1) {
         $ext1 = $file1->getClientOriginalExtension();
-        $nama_file1 = "PSH" . date('Ymd') . Str::random() . "." . $ext1;
-        $file1->move(public_path('upload/psh'), $nama_file1);
+        $nama_file1 = "RPS" . date('Ymd') . Str::random() . "." . $ext1;
+        $file1->move(public_path('upload/rps'), $nama_file1);
       }
       $litcatkum = Litcatkum::findOrFail($req->get('litcatkum_id'));
       $litcatkum->litcatkum_nama = $req->get('litcatkum_nama');

@@ -75,13 +75,55 @@ class HomeController extends Controller
           'Content-Type: application/pdf',
         );
 
-        return Response::download($data->bantuan_hukum_file, $data->bantuan_hukum_file . '.pdf', $headers);
+        return Response::download($data->bantuan_hukum_file, $data->bantuan_hukum_judul . '.pdf', $headers);
       } else {
         return abort(403);
       }
     } catch (\Exception $e) {
       return view('frontend.pages.eror', [
-        'header' => "Pendapat & Saran Hukum",
+        'header' => "Bantuan Hukum",
+        'pesan' => $e->getMessage(),
+      ]);
+    }
+  }
+
+  public function litcatkum_rps(Request $req)
+  {
+    try {
+      if ($req->kode == '70121132') {
+        $data = Litcatkum::where('litcatkum_id', $req->id)->first();
+        $headers = array(
+          'Content-Type: application/pdf',
+        );
+
+        return Response::download($data->litcatkum_rps, $data->litcatkum_rps . '_rps.pdf', $headers);
+      } else {
+        return abort(403);
+      }
+    } catch (\Exception $e) {
+      return view('frontend.pages.eror', [
+        'header' => "Penelitian Catatan Hukum (RPS)",
+        'pesan' => $e->getMessage(),
+      ]);
+    }
+  }
+
+  public function litcatkum_skhd(Request $req)
+  {
+    try {
+      if ($req->kode == '70121132') {
+        $data = Litcatkum::where('litcatkum_id', $req->id)->first();
+        $headers = array(
+          'Content-Type: application/pdf',
+        );
+
+        return Response::download($data->litcatkum_skhd, $data->litcatkum_nama . '_skhd.pdf', $headers);
+      } else {
+        return abort(403);
+      }
+    } catch (\Exception $e) {
+      return view('frontend.pages.eror', [
+        'header' => "Penelitian Catatan Hukum (SKHD)",
         'pesan' => $e->getMessage(),
       ]);
     }

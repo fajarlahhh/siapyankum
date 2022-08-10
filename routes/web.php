@@ -177,6 +177,8 @@ Route::prefix('frontend')->group(function () {
   });
 
   Route::prefix('litcatkum')->group(function () {
+    Route::post('/rps', 'HomeController@litcatkum_rps');
+    Route::post('/skhd', 'HomeController@litcatkum_skhd');
     Route::get('/', 'HomeController@litcatkum');
     Route::get('/{id}', 'HomeController@litcatkum_tampil');
   });
