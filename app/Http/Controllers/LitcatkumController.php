@@ -49,6 +49,10 @@ class LitcatkumController extends Controller
         'litcatkum_hukuman' => 'required',
         'litcatkum_nomor_prs' => 'required',
         'litcatkum_hasil' => 'required',
+        'litcatkum_nomor_prs' => 'required',
+        'litcatkum_hasil' => 'required',
+        'skhd_file' => 'required',
+        'rps_file' => 'required',
       ]
     );
     try {
